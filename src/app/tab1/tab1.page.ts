@@ -8,6 +8,24 @@ import { Component } from '@angular/core';
 })
 export class Tab1Page {
 
-  constructor() {}
+  constructor() { }
+
+  // Adicionar estes métodos na classe Tab1Page
+
+  addProduct() {
+    console.log('Adicionar produto');
+  }
+
+  addClient() {
+    console.log('Adicionar cliente');
+  }
+
+  addSale() {
+    console.log('Adicionar venda');
+  }
+
+  addPayment() {
+    console.log('Adicionar pagamento');
+  }
 
 }

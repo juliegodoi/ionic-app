@@ -1,17 +1,33 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>
-      Tab 2
-    </ion-title>
-  </ion-toolbar>
-</ion-header>
-
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Tab 2</ion-title>
-    </ion-toolbar>
-  </ion-header>
 
-  <app-explore-container name="Tab 2 page"></app-explore-container>
+  <div class="ion-padding">
+
+    <ion-searchbar placeholder="Buscar clientes" debounce="300"></ion-searchbar>
+    
+    <ion-card class="client-card" *ngFor="let client of clients">
+      <ion-item
+        button
+        detail="true"
+        lines="none"
+        class="ion-activatable ripple-parent"
+        (click)="openClientDetails(client)"
+      >
+        <ion-icon name="person" slot="start" color="primary"></ion-icon>
+
+        <ion-label>
+          <h2>{{ client.name }}</h2>
+          <p>{{ client.phone }}</p>
+        </ion-label>
+
+        <ion-ripple-effect></ion-ripple-effect>
+      </ion-item>
+    </ion-card>
+  </div>
+
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button>
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
 </ion-content>

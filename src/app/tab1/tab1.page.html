@@ -1,17 +1,92 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>
-      Tab 1
-    </ion-title>
-  </ion-toolbar>
-</ion-header>
-
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Tab 1</ion-title>
-    </ion-toolbar>
-  </ion-header>
 
-  <app-explore-container name="Tab 1 page"></app-explore-container>
+  <ion-grid class="ion-padding stats-grid">
+
+    <h2 style="margin-bottom: 10px;"></h2>
+
+    <ion-row>
+      <ion-col size="6">
+        <ion-card class="stat-card">
+          <ion-card-content class="ion-text-center">
+            <ion-icon name="stats-chart-outline" style="font-size: 28px;" ></ion-icon>
+            <h3>Vendas do Mês</h3>
+            <h2>R$ 12.500</h2>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+      <ion-col size="6">
+        <ion-card class="stat-card">
+          <ion-card-content class="ion-text-center">
+            <ion-icon name="cash-outline" style="font-size: 28px;" ></ion-icon>
+            <h3>Total Recebido</h3>
+            <h2>R$ 10.000</h2>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col size="12">
+        <ion-card class="stat-card">
+          <ion-card-content class="ion-text-center">
+            <ion-icon name="wallet-outline" style="font-size: 28px;" ></ion-icon>
+            <h3>Total a Receber</h3>
+            <h2>R$ 2.500</h2>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col size="6">
+        <ion-card class="stat-card">
+          <ion-card-content class="ion-text-center">
+            <ion-icon name="cube-outline" style="font-size: 28px;" ></ion-icon>
+            <h3>Produtos</h3>
+            <h2>50</h2>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+      <ion-col size="6">
+        <ion-card class="stat-card">
+          <ion-card-content class="ion-text-center">
+            <ion-icon name="people-outline" style="font-size: 28px;" ></ion-icon>
+            <h3>Clientes</h3>
+            <h2>120</h2>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+
+    <ion-row style="margin-top: 10px;">
+      <ion-col size="6">
+        <ion-button expand="block" fill="outline">
+          <ion-icon name="add" slot="start"></ion-icon>
+          Produto
+        </ion-button>
+      </ion-col>
+      <ion-col size="6">
+        <ion-button expand="block" fill="outline">
+          <ion-icon name="add" slot="start"></ion-icon>
+          Cliente
+        </ion-button>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="6">
+        <ion-button expand="block" fill="outline">
+          <ion-icon name="add" slot="start"></ion-icon>
+          Venda
+        </ion-button>
+      </ion-col>
+      <ion-col size="6">
+        <ion-button expand="block" fill="outline">
+          <ion-icon name="add" slot="start"></ion-icon>
+          Pagamento
+        </ion-button>
+      </ion-col>
+    </ion-row>
+
+  </ion-grid>
+
 </ion-content>

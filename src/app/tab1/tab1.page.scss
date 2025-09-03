@@ -1,0 +1,27 @@
+.stats-grid {
+    ion-card {
+        margin: 0;
+        /* diminui espaço entre os cards */
+        --border-radius: 14px;
+        --background: var(--ion-item-background);
+    }
+
+    h3 {
+        font-size: 0.9rem;
+        font-weight: 500;
+        margin: 6px 0 2px 0;
+        color: var(--ion-text-color);
+    }
+
+    h2 {
+        font-size: 1.3rem;
+        font-weight: 600;
+        color: var(--ion-text-primary);
+        margin: 0;
+    }
+
+    ion-icon {
+        color: var(--ion-color-primary);
+        margin-bottom: 6px;
+    }
+}
