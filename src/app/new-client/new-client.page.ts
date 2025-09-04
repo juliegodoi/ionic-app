@@ -24,12 +24,10 @@ export class NewClientPage implements OnInit {
   ngOnInit() {
   }
 
-  // Verificar se o formulário é válido
   isFormValid(): boolean {
     return this.client.name.trim() !== '' && this.client.phone.trim() !== '';
   }
 
-  // Salvar cliente
   async saveClient() {
     if (!this.isFormValid()) {
       await this.showToast('Por favor, preencha os campos obrigatórios', 'warning');
@@ -37,13 +35,10 @@ export class NewClientPage implements OnInit {
     }
 
     try {
-      // Aqui você implementaria a lógica de salvar no banco/API
       console.log('Cliente a ser salvo:', this.client);
-      
-      // Simular salvamento
+    
       await this.showToast('Cliente salvo com sucesso!', 'success');
       
-      // Voltar para a lista de clientes
       this.navCtrl.back();
       
     } catch (error) {
@@ -52,7 +47,6 @@ export class NewClientPage implements OnInit {
     }
   }
 
-  // Mostrar mensagem toast
   async showToast(message: string, color: string) {
     const toast = await this.toastController.create({
       message: message,
