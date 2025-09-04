@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-tab1',
@@ -8,24 +9,23 @@ import { Component } from '@angular/core';
 })
 export class Tab1Page {
 
-  constructor() { }
+  constructor(private navCtrl: NavController) { }
 
-  // Adicionar estes métodos na classe Tab1Page
 
-  addProduct() {
-    console.log('Adicionar produto');
+  addNewProduct() {
+    this.navCtrl.navigateForward('/new-product');
   }
 
-  addClient() {
-    console.log('Adicionar cliente');
+  addNewClient() {
+    this.navCtrl.navigateForward('/new-client');
   }
 
-  addSale() {
-    console.log('Adicionar venda');
+  addNewSale() {
+    this.navCtrl.navigateForward('/new-sale');
   }
 
-  addPayment() {
-    console.log('Adicionar pagamento');
-  }
+  // addNewPayment() {
+  //   this.navCtrl.navigateForward('/new-payment');
+  // }
 
 }

@@ -1,0 +1,63 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/tab4"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Nova venda</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="ion-padding">
+
+    <ion-card>
+      <ion-item button (click)="selectClient()">
+        <ion-label position="stacked" style="font-size: 22px;">Cliente</ion-label>
+        <ion-input [value]="sale.selectedClient" placeholder="Selecionar cliente" readonly></ion-input>
+      </ion-item>
+    </ion-card>
+
+    <ion-card>
+      <ion-item button (click)="selectProducts()">
+        <ion-label position="stacked" style="font-size: 22px;">Produtos</ion-label>
+        <ion-input [value]="sale.selectedProducts.length > 0 ? sale.selectedProducts.length + ' selecionados' : ''"
+          placeholder="Selecionar produtos" readonly></ion-input>
+      </ion-item>
+    </ion-card>
+
+    <ion-card>
+      <ion-item>
+        <ion-label position="stacked" style="font-size: 22px;">Forma de pagamento</ion-label>
+        <ion-select [(ngModel)]="sale.paymentMethod" placeholder="Selecione" interface="popover">
+          <ion-select-option value="cartao_debito">Cartão de Débito</ion-select-option>
+          <ion-select-option value="cartao_credito">Cartão de Crédito</ion-select-option>
+          <ion-select-option value="dinheiro">Dinheiro</ion-select-option>
+          <ion-select-option value="pix">PIX</ion-select-option>
+        </ion-select>
+      </ion-item>
+    </ion-card>
+
+    <ion-card>
+      <ion-item>
+        <ion-label position="stacked" style="font-size: 22px;">Condição de pagamento</ion-label>
+        <ion-textarea [(ngModel)]="sale.paymentCondition" placeholder="Descreva as condições de pagamento..." rows="4"
+          autoGrow="true"></ion-textarea>
+      </ion-item>
+    </ion-card>
+
+    <div style="margin-top: 24px; padding: 16px;">
+      <ion-label style="font-size: 20px;">
+        Valor total:
+      </ion-label>
+    </div>
+
+  </div>
+
+  <div class="ion-padding">
+    <ion-button expand="block" fill="solid" color="primary" (click)="saveSale()" [disabled]="!isFormValid()"
+      style="height: 48px;">
+      Salvar
+    </ion-button>
+  </div>
+
+</ion-content>

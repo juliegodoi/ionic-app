@@ -1,22 +1,18 @@
 <ion-content [fullscreen]="true">
 
   <div class="ion-padding">
-    
+
     <ion-searchbar placeholder="Buscar produtos" debounce="300"></ion-searchbar>
 
     <ion-card class="product-card" *ngFor="let product of products">
-      <ion-item
-        button
-        detail="true"
-        lines="none"
-        class="ion-activatable ripple-parent"
-        (click)="openProductDetails(product)"
-      >
+      <ion-item button detail="true" lines="none" class="ion-activatable ripple-parent"
+        (click)="openProductDetails(product)">
         <ion-icon name="cube" slot="start" color="primary"></ion-icon>
 
         <ion-label>
           <h2>{{ product.name }}</h2>
-          <p>R$ {{ product.price }} — {{ product.stock }} un.</p>
+          <p>R$ {{ product.price }}</p>
+          <p>{{ product.stock }} unidades</p>
         </ion-label>
 
         <ion-ripple-effect></ion-ripple-effect>
@@ -25,7 +21,7 @@
   </div>
 
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-    <ion-fab-button>
+    <ion-fab-button (click)="addNewProduct()">
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>
   </ion-fab>

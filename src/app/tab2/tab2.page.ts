@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-tab2',
@@ -8,7 +9,6 @@ import { Component } from '@angular/core';
 })
 export class Tab2Page {
 
-  // Adicionar estas propriedades e métodos na classe Tab2Page
 
 clients = [
   { id: 1, name: 'Maria Silva', phone: '(11) 98765-4321' },
@@ -20,12 +20,10 @@ clients = [
 
 filteredClients = [...this.clients];
 
-constructor() {
-  // Inicializar com todos os clientes
-  this.filteredClients = this.clients;
-}
+  constructor(private navCtrl: NavController) { 
+    this.filteredClients = this.clients;
+  }
 
-// Buscar clientes
 searchClients(event: any) {
   const searchTerm = event.target.value.toLowerCase();
   
@@ -39,16 +37,13 @@ searchClients(event: any) {
   }
 }
 
-// Abrir detalhes do cliente
 openClientDetails(client: any) {
   console.log('Abrir detalhes do cliente:', client);
-  // Implementar navegação para página de detalhes do cliente
+
 }
 
-// Adicionar novo cliente
-addNewClient() {
-  console.log('Adicionar novo cliente');
-  // Implementar navegação para página de adicionar cliente
-}
+  addNewClient() {
+    this.navCtrl.navigateForward('/new-client');
+  }
 
 }

@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-tab3',
@@ -8,8 +9,6 @@ import { Component } from '@angular/core';
 })
 export class Tab3Page {
 
-  // Adicionar estas propriedades e métodos na classe Tab3Page
-
   products = [
     { id: 1, name: 'Camiseta Branca P', price: '59.90', stock: 22 },
     { id: 2, name: 'Camiseta Branca M', price: '59.90', stock: 18 },
@@ -18,17 +17,14 @@ export class Tab3Page {
     { id: 5, name: 'Camiseta Preta P', price: '59.90', stock: 25 },
     { id: 6, name: 'Camiseta Preta M', price: '59.90', stock: 20 },
     { id: 7, name: 'Calça Jeans 38', price: '129.90', stock: 8 },
-    { id: 8, name: 'Calça Jeans 40', price: '129.90', stock: 6 },
   ];
 
   filteredProducts = [...this.products];
 
-  constructor() {
-    // Inicializar com todos os produtos
+  constructor(private navCtrl: NavController) {
     this.filteredProducts = this.products;
   }
 
-  // Buscar produtos
   searchProducts(event: any) {
     const searchTerm = event.target.value.toLowerCase();
 
@@ -42,19 +38,15 @@ export class Tab3Page {
     }
   }
 
-  // Abrir detalhes do produto
   openProductDetails(product: any) {
     console.log('Abrir detalhes do produto:', product);
-    // Implementar navegação para página de detalhes do produto
   }
 
-  // Adicionar novo produto
   addNewProduct() {
-    console.log('Adicionar novo produto');
-    // Implementar navegação para página de adicionar produto
+    this.navCtrl.navigateForward('/new-product');
   }
 
-  // Formatar preço (método auxiliar)
+
   formatPrice(price: string): string {
     return `R$ ${price}`;
   }
