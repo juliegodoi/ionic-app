@@ -36,11 +36,12 @@
 
     <ion-card>
       <ion-item>
-        <ion-label position="stacked" style="font-size: 22px;">Estoque</ion-label>
+        <ion-label position="stacked" style="font-size: 22px;">Estoque *</ion-label>
         <ion-input 
           [(ngModel)]="product.stock" 
           placeholder="Quantidade em estoque" 
           type="number"
+          required
         ></ion-input>
       </ion-item>
     </ion-card>

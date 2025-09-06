@@ -29,7 +29,8 @@ export class NewSalePage implements OnInit {
     selectedProducts: [] as any[],
     value: 'R$ 0,00',
     paymentMethod: '',
-    paymentCondition: ''
+    paymentCondition: '',
+    date: new Date().toLocaleDateString('pt-BR')
   };
 
   constructor(
@@ -44,8 +45,10 @@ export class NewSalePage implements OnInit {
   isFormValid(): boolean {
     return this.sale.selectedClient !== '' &&
       this.sale.selectedProducts.length > 0 &&
-      this.sale.paymentMethod !== '';
+      this.sale.paymentMethod !== '' &&
+      this.sale.date !== '';
   }
+
 
   async selectClient() {
     const alert = await this.alertController.create({

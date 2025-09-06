@@ -24,12 +24,14 @@ export class NewProductPage implements OnInit {
   ngOnInit() {
   }
 
-  // Verificar se o formulário é válido
   isFormValid(): boolean {
-    return this.product.title.trim() !== '' && this.product.value.toString().trim() !== '';
+    return (
+      this.product.title.trim() !== '' &&
+      this.product.value.toString().trim() !== '' &&
+      this.product.stock.toString().trim() !== ''
+    );
   }
 
-  // Salvar produto
   async saveProduct() {
     if (!this.isFormValid()) {
       await this.showToast('Por favor, preencha os campos obrigatórios', 'warning');
@@ -37,22 +39,18 @@ export class NewProductPage implements OnInit {
     }
 
     try {
-      // Aqui você implementaria a lógica de salvar no banco/API
       console.log('Produto a ser salvo:', this.product);
-      
-      // Simular salvamento
+
       await this.showToast('Produto salvo com sucesso!', 'success');
-      
-      // Voltar para a lista de produtos
+
       this.navCtrl.back();
-      
+
     } catch (error) {
       await this.showToast('Erro ao salvar produto', 'danger');
       console.error('Erro:', error);
     }
   }
 
-  // Mostrar mensagem toast
   async showToast(message: string, color: string) {
     const toast = await this.toastController.create({
       message: message,

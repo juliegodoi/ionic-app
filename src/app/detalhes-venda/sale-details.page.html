@@ -21,13 +21,21 @@
       </ion-item>
 
       <ion-item>
+        <ion-label position="stacked">Data da venda</ion-label>
+        <ion-input [(ngModel)]="sale.date" [readonly]="!isEditing" placeholder="00/00/0000" maxlength="10"
+          inputmode="numeric">
+        </ion-input>
+      </ion-item>
+      
+      <ion-item>
         <ion-label position="stacked">Forma de pagamento</ion-label>
         <ion-input [(ngModel)]="sale.paymentMethod" [readonly]="!isEditing"></ion-input>
       </ion-item>
 
       <ion-item>
         <ion-label position="stacked">Condições</ion-label>
-        <ion-textarea [(ngModel)]="sale.paymentCondition" [readonly]="!isEditing" rows="3" autoGrow="true"></ion-textarea>
+        <ion-textarea [(ngModel)]="sale.paymentCondition" [readonly]="!isEditing" rows="3"
+          autoGrow="true"></ion-textarea>
       </ion-item>
 
       <ion-item>

@@ -40,7 +40,7 @@ const routes: Routes = [
   },
   {
     path: 'sale-details/:id',
-    loadChildren: () => import('./detalhes-vendas/sale-details.module').then( m => m.SaleDetailsPageModule)
+    loadChildren: () => import('./detalhes-venda/sale-details.module').then( m => m.SaleDetailsPageModule)
   }
 ];
 @NgModule({
