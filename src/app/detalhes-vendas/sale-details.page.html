@@ -1,0 +1,63 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Detalhes da venda</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/tab4"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Informações</ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+      <ion-item>
+        <ion-label position="stacked">Cliente</ion-label>
+        <ion-input [(ngModel)]="sale.clientName" [readonly]="!isEditing"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Forma de pagamento</ion-label>
+        <ion-input [(ngModel)]="sale.paymentMethod" [readonly]="!isEditing"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Condições</ion-label>
+        <ion-textarea [(ngModel)]="sale.paymentCondition" [readonly]="!isEditing" rows="3" autoGrow="true"></ion-textarea>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Valor</ion-label>
+        <ion-input [value]="'R$ ' + getTotalValue().toFixed(2)" readonly></ion-input>
+      </ion-item>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card button (click)="openProductsList()">
+    <ion-card-header>
+      <ion-card-title>Produtos</ion-card-title>
+    </ion-card-header>
+    <ion-card-content class="products-row">
+      <span>{{ sale.products?.length || 0 }} produtos relacionados</span>
+      <ion-icon name="eye-outline" size="small"></ion-icon>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-row>
+    <ion-col>
+      <ion-button expand="block" color="primary" *ngIf="!isEditing" (click)="enableEdit()">Editar</ion-button>
+      <ion-button expand="block" color="success" *ngIf="isEditing" (click)="saveSale()">Salvar</ion-button>
+    </ion-col>
+  </ion-row>
+
+  <ion-row *ngIf="!isEditing">
+    <ion-col>
+      <ion-button expand="block" color="danger" (click)="confirmDelete()">Excluir</ion-button>
+    </ion-col>
+  </ion-row>
+
+</ion-content>

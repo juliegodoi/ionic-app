@@ -41,6 +41,7 @@ export class Tab4Page {
     this.navCtrl.navigateForward('/new-sale');
   }
   openSaleDetails(sale: any) {
-    console.log('Detalhes da venda:', sale);
+    console.log('Abrir detalhes da venda:', sale);
+    this.navCtrl.navigateForward(`/sale-details/${sale.id}`);
   }
 }

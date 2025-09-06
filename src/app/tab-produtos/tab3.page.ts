@@ -40,8 +40,8 @@ export class Tab3Page {
 
   openProductDetails(product: any) {
     console.log('Abrir detalhes do produto:', product);
+    this.navCtrl.navigateForward(`/product-details/${product.id}`);
   }
-
   addNewProduct() {
     this.navCtrl.navigateForward('/new-product');
   }

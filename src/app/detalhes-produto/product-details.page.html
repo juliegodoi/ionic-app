@@ -1,0 +1,58 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Detalhes do produto</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/tab3"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Informações</ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+      <ion-item>
+        <ion-label position="stacked">Título</ion-label>
+        <ion-input [(ngModel)]="product.name" [readonly]="!isEditing"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Valor</ion-label>
+        <ion-input [(ngModel)]="product.price" [readonly]="!isEditing" type="number"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Estoque</ion-label>
+        <ion-input [(ngModel)]="product.stock" [readonly]="!isEditing" type="number"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Observações</ion-label>
+        <ion-textarea 
+          [(ngModel)]="product.observations" 
+          [readonly]="!isEditing"
+          rows="4"
+          autoGrow="true"
+        ></ion-textarea>
+      </ion-item>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-row>
+    <ion-col>
+      <ion-button expand="block" color="primary" *ngIf="!isEditing" (click)="enableEdit()">Editar</ion-button>
+      <ion-button expand="block" color="success" *ngIf="isEditing" (click)="saveProduct()">Salvar</ion-button>
+    </ion-col>
+  </ion-row>
+
+  <ion-row *ngIf="!isEditing">
+    <ion-col>
+      <ion-button expand="block" color="danger" (click)="confirmDelete()">Excluir</ion-button>
+    </ion-col>
+  </ion-row>
+
+</ion-content>

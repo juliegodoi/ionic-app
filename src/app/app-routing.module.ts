@@ -28,13 +28,20 @@ const routes: Routes = [
   },
   {
     path: 'client-details',
-    loadChildren: () => import('./cliente-detalhes/client-details.module').then(m => m.ClientDetailsPageModule)
+    loadChildren: () => import('./detalhes-cliente/client-details.module').then(m => m.ClientDetailsPageModule)
   },
   {
     path: 'client-details/:id',
-    loadChildren: () => import('./cliente-detalhes/client-details.module').then(m => m.ClientDetailsPageModule)
+    loadChildren: () => import('./detalhes-cliente/client-details.module').then(m => m.ClientDetailsPageModule)
+  },
+  {
+    path: 'product-details/:id',
+    loadChildren: () => import('./detalhes-produto/product-details.module').then(m => m.ProductDetailsPageModule)
+  },
+  {
+    path: 'sale-details/:id',
+    loadChildren: () => import('./detalhes-vendas/sale-details.module').then( m => m.SaleDetailsPageModule)
   }
-
 ];
 @NgModule({
   imports: [
