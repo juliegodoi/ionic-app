@@ -1,0 +1,77 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/tab4"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Adicionar pagamento</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="ion-padding">
+
+    <ion-card>
+      <ion-item button (click)="selectSale()">
+        <ion-label position="stacked" style="font-size: 22px;">Venda *</ion-label>
+        <ion-input [value]="payment.selectedSale" placeholder="Selecionar venda" readonly></ion-input>
+        <ion-icon name="chevron-down-outline" slot="end" size="small" class="dropdown-icon">
+        </ion-icon>
+      </ion-item>
+    </ion-card>
+
+    <ion-card>
+      <ion-item>
+        <ion-label position="stacked" style="font-size: 22px;">Valor *</ion-label>
+        <ion-input type="number" [(ngModel)]="payment.value" placeholder="0,00" (ionInput)="formatValue($event)">
+        </ion-input>
+      </ion-item>
+    </ion-card>
+
+    <ion-card>
+      <ion-item>
+        <ion-label position="stacked" style="font-size: 22px;">Forma de pagamento *</ion-label>
+        <ion-select [(ngModel)]="payment.paymentMethod" placeholder="Selecione" interface="popover">
+          <ion-select-option value="cartao_debito">Cartão de Débito</ion-select-option>
+          <ion-select-option value="cartao_credito">Cartão de Crédito</ion-select-option>
+          <ion-select-option value="dinheiro">Dinheiro</ion-select-option>
+          <ion-select-option value="pix">PIX</ion-select-option>
+        </ion-select>
+      </ion-item>
+    </ion-card>
+
+    <ion-card>
+      <ion-item>
+        <ion-label position="stacked" style="font-size: 22px;">Observações</ion-label>
+        <ion-textarea [(ngModel)]="payment.observations" placeholder="Observações sobre o pagamento..." rows="3"
+          autoGrow="true">
+        </ion-textarea>
+      </ion-item>
+    </ion-card>
+
+    <!-- Resumo da venda selecionada -->
+    <ion-card *ngIf="selectedSaleDetails && isFormValid()">
+      <ion-card-header>
+        <ion-card-title style="font-size: 18px;">Resumo da Venda</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <div><strong>Cliente:</strong> {{ selectedSaleDetails.client }}</div>
+        <div><strong>Valor total:</strong> {{ selectedSaleDetails.totalValue }}</div>
+        <div><strong>Valor pago:</strong> {{ selectedSaleDetails.paidValue }}</div>
+        <div>
+          <strong>Saldo restante:</strong>
+          <span [style.color]="selectedSaleDetails.remainingBalance === 'R$ 0,00' ? 'green' : 'red'">
+            {{ selectedSaleDetails.remainingBalance }}
+          </span>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+  </div>
+
+  <div class="ion-padding">
+    <ion-button expand="block" fill="solid" color="primary" (click)="savePayment()" [disabled]="!isFormValid()"
+      style="height: 48px;">
+      Salvar
+    </ion-button>
+  </div>
+</ion-content>

@@ -38,8 +38,7 @@ searchClients(event: any) {
 }
 
 openClientDetails(client: any) {
-  console.log('Abrir detalhes do cliente:', client);
-
+  this.navCtrl.navigateForward(`/client-details/${client.id}`);
 }
 
   addNewClient() {

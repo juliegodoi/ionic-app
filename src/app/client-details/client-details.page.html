@@ -1,0 +1,63 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Detalhes do cliente</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/tab2"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <!-- Informações do cliente -->
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Informações</ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+      <ion-item>
+        <ion-label position="stacked">Nome</ion-label>
+        <ion-input [(ngModel)]="client.name" [readonly]="!isEditing"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Telefone</ion-label>
+        <ion-input [(ngModel)]="client.phone" [readonly]="!isEditing"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Email</ion-label>
+        <ion-input [(ngModel)]="client.email" [readonly]="!isEditing"></ion-input>
+      </ion-item>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Lista de vendas -->
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Vendas</ion-card-title>
+    </ion-card-header>
+
+    <ion-list>
+      <ion-item *ngFor="let sale of sales">
+        <ion-label>
+          <h2>Venda #{{ sale.id }}</h2>
+          <p>Valor: {{ sale.value }}</p>
+        </ion-label>
+      </ion-item>
+    </ion-list>
+  </ion-card>
+
+  <!-- Ações -->
+  <ion-row>
+    <ion-col>
+      <ion-button expand="block" color="primary" *ngIf="!isEditing" (click)="enableEdit()">Editar</ion-button>
+      <ion-button expand="block" color="success" *ngIf="isEditing" (click)="saveClient()">Salvar</ion-button>
+    </ion-col>
+    <ion-col>
+      <ion-button expand="block" color="danger" (click)="confirmDelete()">Excluir</ion-button>
+    </ion-col>
+  </ion-row>
+
+</ion-content>

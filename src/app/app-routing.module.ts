@@ -8,24 +8,33 @@ const routes: Routes = [
   },
   {
     path: 'new-client',
-    loadChildren: () => import('./new-client/new-client.module').then(m => m.NewClientPageModule)
+    loadChildren: () => import('./novo-cliente/new-client.module').then(m => m.NewClientPageModule)
   },
   {
     path: 'new-product',
-    loadChildren: () => import('./new-product/new-product.module').then(m => m.NewProductPageModule)
+    loadChildren: () => import('./novo-produto/new-product.module').then(m => m.NewProductPageModule)
   },
   {
     path: 'new-product',
-    loadChildren: () => import('./new-product/new-product.module').then(m => m.NewProductPageModule)
+    loadChildren: () => import('./novo-produto/new-product.module').then(m => m.NewProductPageModule)
   },
   {
     path: 'new-sale',
-    loadChildren: () => import('./new-sale/new-sale.module').then(m => m.NewSalePageModule)
+    loadChildren: () => import('./nova-venda/new-sale.module').then(m => m.NewSalePageModule)
   },
   {
-    path: 'new-sale',
-    loadChildren: () => import('./new-sale/new-sale.module').then(m => m.NewSalePageModule)
+    path: 'new-payment',
+    loadChildren: () => import('./adicionar-pagamento/new-payment.module').then(m => m.NewPaymentPageModule)
   },
+  {
+    path: 'client-details',
+    loadChildren: () => import('./client-details/client-details.module').then(m => m.ClientDetailsPageModule)
+  },
+  {
+    path: 'client-details/:id',
+    loadChildren: () => import('./client-details/client-details.module').then(m => m.ClientDetailsPageModule)
+  }
+
 ];
 @NgModule({
   imports: [
