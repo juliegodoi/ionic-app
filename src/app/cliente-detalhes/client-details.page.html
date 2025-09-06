@@ -34,19 +34,14 @@
   </ion-card>
 
   <!-- Lista de vendas -->
-  <ion-card>
+  <ion-card button (click)="openSalesList()">
     <ion-card-header>
       <ion-card-title>Vendas</ion-card-title>
     </ion-card-header>
-
-    <ion-list>
-      <ion-item *ngFor="let sale of sales">
-        <ion-label>
-          <h2>Venda #{{ sale.id }}</h2>
-          <p>Valor: {{ sale.value }}</p>
-        </ion-label>
-      </ion-item>
-    </ion-list>
+    <ion-card-content class="sales-row">
+      <span>{{ sales.length }} vendas relacionadas</span>
+      <ion-icon name="eye-outline" size="small"></ion-icon>
+    </ion-card-content>
   </ion-card>
 
   <!-- Ações -->
@@ -55,6 +50,9 @@
       <ion-button expand="block" color="primary" *ngIf="!isEditing" (click)="enableEdit()">Editar</ion-button>
       <ion-button expand="block" color="success" *ngIf="isEditing" (click)="saveClient()">Salvar</ion-button>
     </ion-col>
+  </ion-row>
+
+  <ion-row *ngIf="!isEditing">
     <ion-col>
       <ion-button expand="block" color="danger" (click)="confirmDelete()">Excluir</ion-button>
     </ion-col>

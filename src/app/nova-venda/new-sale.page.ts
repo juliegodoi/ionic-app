@@ -49,7 +49,7 @@ export class NewSalePage implements OnInit {
 
   async selectClient() {
     const alert = await this.alertController.create({
-      header: 'Selecionar Cliente',
+      header: 'Selecionar cliente',
       inputs: this.clients.map(client => ({
         type: 'radio',
         label: client.name,
@@ -76,7 +76,7 @@ export class NewSalePage implements OnInit {
 
   async selectProducts() {
     const alert = await this.alertController.create({
-      header: 'Selecionar Produtos',
+      header: 'Selecionar produtos',
       inputs: this.products.map(product => ({
         type: 'checkbox',
         label: `${product.name} - R$ ${product.price.toFixed(2)}`,

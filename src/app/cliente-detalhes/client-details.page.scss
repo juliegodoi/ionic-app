@@ -1,0 +1,21 @@
+.sales-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.sales-alert .alert-message {
+    max-height: 300px;
+    /* rolagem se muitas vendas */
+    overflow-y: auto;
+    text-align: left;
+}
+
+.sales-alert ion-list {
+    padding: 0;
+}
+
+.sales-alert ion-item {
+    --padding-start: 0;
+    --inner-padding-end: 0;
+}

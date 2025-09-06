@@ -28,11 +28,11 @@ const routes: Routes = [
   },
   {
     path: 'client-details',
-    loadChildren: () => import('./client-details/client-details.module').then(m => m.ClientDetailsPageModule)
+    loadChildren: () => import('./cliente-detalhes/client-details.module').then(m => m.ClientDetailsPageModule)
   },
   {
     path: 'client-details/:id',
-    loadChildren: () => import('./client-details/client-details.module').then(m => m.ClientDetailsPageModule)
+    loadChildren: () => import('./cliente-detalhes/client-details.module').then(m => m.ClientDetailsPageModule)
   }
 
 ];
