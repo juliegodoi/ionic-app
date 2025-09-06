@@ -13,28 +13,28 @@
     <ion-card>
       <ion-item>
         <ion-label position="stacked" style="font-size: 22px;">Nome *</ion-label>
-        <ion-input [(ngModel)]="client.name" placeholder="Nome completo" type="text" required></ion-input>
+        <ion-input [(ngModel)]="client.nome" placeholder="Nome completo" type="text" required></ion-input>
       </ion-item>
     </ion-card>
 
     <ion-card>
       <ion-item>
         <ion-label position="stacked" style="font-size: 22px;">Telefone *</ion-label>
-        <ion-input [(ngModel)]="client.phone" placeholder="(00) 00000-0000" type="tel" required></ion-input>
+        <ion-input [(ngModel)]="client.telefone" placeholder="(00) 00000-0000" type="tel" required></ion-input>
       </ion-item>
     </ion-card>
 
     <ion-card>
       <ion-item>
         <ion-label position="stacked" style="font-size: 22px;">Endereço</ion-label>
-        <ion-input [(ngModel)]="client.address" placeholder="Rua, número, bairro e cidade" type="text"></ion-input>
+        <ion-input [(ngModel)]="client.endereco" placeholder="Rua, número, bairro e cidade" type="text"></ion-input>
       </ion-item>
     </ion-card>
 
     <ion-card>
       <ion-item>
         <ion-label position="stacked" style="font-size: 22px;">Observações</ion-label>
-        <ion-textarea [(ngModel)]="client.observations" placeholder="Digite suas observações aqui..." rows="6"
+        <ion-textarea [(ngModel)]="client.observacoes" placeholder="Digite suas observações aqui..." rows="6"
           autoGrow="true"></ion-textarea>
       </ion-item>
     </ion-card>

@@ -1,10 +1,13 @@
 <ion-content [fullscreen]="true">
-
   <div class="ion-padding">
 
-    <ion-searchbar placeholder="Buscar clientes" debounce="300"></ion-searchbar>
+    <ion-searchbar 
+      placeholder="Buscar clientes" 
+      debounce="300"
+      (ionInput)="searchClients($event)">
+    </ion-searchbar>
     
-    <ion-card class="client-card" *ngFor="let client of clients">
+    <ion-card class="client-card" *ngFor="let client of filteredClients">
       <ion-item
         button
         detail="true"
@@ -15,19 +18,25 @@
         <ion-icon name="person" slot="start" color="primary"></ion-icon>
 
         <ion-label>
-          <h2>{{ client.name }}</h2>
-          <p>{{ client.phone }}</p>
+          <h2>{{ client.nome }}</h2>
+          <p>{{ client.telefone }}</p>
         </ion-label>
 
         <ion-ripple-effect></ion-ripple-effect>
       </ion-item>
     </ion-card>
+
+    <!-- Mensagem quando não houver clientes -->
+    <div *ngIf="filteredClients.length === 0" class="ion-text-center ion-margin-top">
+      <ion-icon name="people-outline" size="large" color="medium"></ion-icon>
+      <p color="medium">Nenhum cliente encontrado</p>
+    </div>
   </div>
 
-<ion-fab vertical="bottom" horizontal="end" slot="fixed">
-  <ion-fab-button (click)="addNewClient()">
-    <ion-icon name="add"></ion-icon>
-  </ion-fab-button>
-</ion-fab>
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button (click)="addNewClient()">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
 
 </ion-content>
