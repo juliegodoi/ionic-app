@@ -45,5 +45,14 @@ export class Tab1Page {
   addNewPayment() {
     this.navCtrl.navigateForward('/new-payment');
   }
+  isPixModalOpen = false;
+
+  openPixModal() {
+    this.isPixModalOpen = true;
+  }
+
+  closePixModal() {
+    this.isPixModalOpen = false;
+  }
 
 }
