@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController, ToastController, LoadingController } from '@ionic/angular';
+import { NavController } from '@ionic/angular';
 import { ClientService, Client } from '../services/client.service';
 
 @Component({
@@ -9,7 +9,6 @@ import { ClientService, Client } from '../services/client.service';
   standalone: false,
 })
 export class NewClientPage implements OnInit {
-
   client: Client = {
     nome: '',
     telefone: '',
@@ -19,8 +18,6 @@ export class NewClientPage implements OnInit {
 
   constructor(
     private navCtrl: NavController,
-    private toastController: ToastController,
-    private loadingController: LoadingController,
     private clientService: ClientService
   ) { }
 
@@ -31,46 +28,16 @@ export class NewClientPage implements OnInit {
     return this.client.nome.trim() !== '' && this.client.telefone.trim() !== '';
   }
 
-  async saveClient() {
+  saveClient() {
     if (!this.isFormValid()) {
-      await this.showToast('Por favor, preencha os campos obrigatórios', 'warning');
       return;
     }
-
-    const loading = await this.loadingController.create({
-      message: 'Salvando cliente...',
-      spinner: 'circular'
+    this.clientService.createClient(this.client).subscribe({
+      next: () => {
+        this.navCtrl.navigateBack('/tabs/tab2');
+      },
+      error: () => {
+      }
     });
-    await loading.present();
-
-    try {
-      this.clientService.createClient(this.client).subscribe({
-        next: async (createdClient) => {
-          loading.dismiss();
-          await this.showToast('Cliente salvo com sucesso!', 'success');
-          console.log('Cliente criado:', createdClient);
-          this.navCtrl.back();
-        },
-        error: async (error) => {
-          loading.dismiss();
-          await this.showToast('Erro ao salvar cliente', 'danger');
-          console.error('Erro ao criar cliente:', error);
-        }
-      });
-    } catch (error) {
-      loading.dismiss();
-      await this.showToast('Erro ao salvar cliente', 'danger');
-      console.error('Erro:', error);
-    }
-  }
-
-  private async showToast(message: string, color: string) {
-    const toast = await this.toastController.create({
-      message: message,
-      duration: 3000,
-      position: 'top',
-      color: color
-    });
-    await toast.present();
   }
 }
