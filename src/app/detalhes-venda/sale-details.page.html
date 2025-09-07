@@ -1,98 +1,126 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>Detalhes da venda</ion-title>
-    <ion-buttons slot="start">
-      <ion-back-button defaultHref="/tabs/tab4"></ion-back-button>
-    </ion-buttons>
-  </ion-toolbar>
+    <ion-toolbar>
+        <ion-title>Detalhes da venda</ion-title>
+        <ion-buttons slot="start">
+            <ion-back-button defaultHref="/tabs/tab4"></ion-back-button>
+        </ion-buttons>
+    </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
 
-  <ion-card>
-    <ion-card-header>
-      <ion-card-title>Informações</ion-card-title>
-    </ion-card-header>
+    <ion-card>
+        <ion-card-header>
+            <ion-card-title>Informações</ion-card-title>
+        </ion-card-header>
 
-    <ion-card-content>
-      <ion-item>
-        <ion-label position="stacked">Cliente</ion-label>
-        <ion-input [value]="sale?.cliente?.nome" [readonly]="true"></ion-input>
-      </ion-item>
+        <ion-card-content>
+            <ion-item>
+                <ion-label position="stacked">Cliente</ion-label>
+                <ion-input [value]="sale?.cliente?.nome" [readonly]="true"></ion-input>
+            </ion-item>
 
-      <ion-item>
-        <ion-label position="stacked">Data</ion-label>
-        <ion-input [value]="sale?.date" [readonly]="true"></ion-input>
-      </ion-item>
+            <ion-item>
+                <ion-label position="stacked">Data</ion-label>
+                <ion-input [value]="sale?.date" [readonly]="true"></ion-input>
+            </ion-item>
 
-      <ion-item>
-        <ion-label position="stacked">Forma de pagamento</ion-label>
-        <ion-select [(ngModel)]="draftSale.formaPagamento" placeholder="Selecione" interface="popover"
-          [disabled]="!isEditing">
-          <ion-select-option value="cartao_debito">Cartão de Débito</ion-select-option>
-          <ion-select-option value="cartao_credito">Cartão de Crédito</ion-select-option>
-          <ion-select-option value="dinheiro">Dinheiro</ion-select-option>
-          <ion-select-option value="pix">PIX</ion-select-option>
-        </ion-select>
-      </ion-item>
+            <ion-item>
+                <ion-label position="stacked">Forma de pagamento</ion-label>
+                <ion-select [(ngModel)]="draftSale.formaPagamento" placeholder="Selecione" interface="popover"
+                    [disabled]="!isEditing">
+                    <ion-select-option value="cartao_debito">Cartão de Débito</ion-select-option>
+                    <ion-select-option value="cartao_credito">Cartão de Crédito</ion-select-option>
+                    <ion-select-option value="dinheiro">Dinheiro</ion-select-option>
+                    <ion-select-option value="pix">PIX</ion-select-option>
+                </ion-select>
+            </ion-item>
 
-      <ion-item>
-        <ion-label position="stacked">Condições</ion-label>
-        <ion-textarea [(ngModel)]="draftSale.condicoes" [readonly]="!isEditing" rows="3" autoGrow="true"></ion-textarea>
-      </ion-item>
+            <ion-item>
+                <ion-label position="stacked">Condições</ion-label>
+                <ion-textarea [(ngModel)]="draftSale.condicoes" [readonly]="!isEditing" rows="3"
+                    autoGrow="true"></ion-textarea>
+            </ion-item>
 
-      <ion-item>
-        <ion-label position="stacked">Valor</ion-label>
-        <ion-input [value]="'R$ ' + getTotalValue().toFixed(2)" [readonly]="true"></ion-input>
-      </ion-item>
-    </ion-card-content>
-  </ion-card>
+            <ion-item>
+                <ion-label position="stacked">Valor</ion-label>
+                <ion-input [value]="'R$ ' + getTotalValue().toFixed(2)" [readonly]="true"></ion-input>
+            </ion-item>
+        </ion-card-content>
+    </ion-card>
 
-  <ion-card button (click)="openProductsList()">
-    <ion-card-header>
-      <ion-card-title>Produtos</ion-card-title>
-    </ion-card-header>
-    <ion-card-content class="products-row">
-      <span style="color: var(--ion-text-color);">{{ sale?.produtos?.length || 0 }} produtos relacionados</span>
-      <ion-icon name="eye-outline" size="small"></ion-icon>
-    </ion-card-content>
-  </ion-card>
+    <ion-card button (click)="openProductsList()">
+        <ion-card-header>
+            <ion-card-title>Produtos</ion-card-title>
+        </ion-card-header>
+        <ion-card-content class="products-row">
+            <span style="color: var(--ion-text-color);">{{ sale?.produtos?.length || 0 }} produtos relacionados</span>
+            <ion-icon name="eye-outline" size="small"></ion-icon>
+        </ion-card-content>
+    </ion-card>
 
-  <div *ngIf="!isEditing">
-    <ion-row>
-      <ion-col>
-        <ion-button expand="block" color="primary" (click)="enableEdit()">
-          <ion-icon name="create-outline" slot="start"></ion-icon>
-          Editar
-        </ion-button>
-      </ion-col>
-    </ion-row>
+    <ion-card>
+        <ion-card-header>
+            <ion-card-title>Pagamentos</ion-card-title>
+        </ion-card-header>
+        <ion-list *ngIf="sale?.payments as payments; else noPayments">
+            <ion-item *ngFor="let payment of payments">
+                <ion-label>
+                    <h2>R$ {{ payment.valor?.toFixed(2) }}</h2>
+                    <p>{{ payment.formaPagamento }}</p>
+                    <p>{{ payment.observacoes }}</p>
+                    <p>{{ payment.date }}</p>
+                </ion-label>
+            </ion-item>
+        </ion-list>
+        <ng-template #noPayments>
+            <ion-card-content>
+                <p>Nenhum pagamento relacionado a esta venda.</p>
+            </ion-card-content>
+        </ng-template>
+        <ion-item>
+            <ion-label>
+                <p>Valor Total Pago:</p>
+                <h3>R$ {{ getTotalPaid().toFixed(2) }}</h3>
+                <p>Saldo Restante:</p>
+                <h3>R$ {{ getRemainingBalance().toFixed(2) }}</h3>
+            </ion-label>
+        </ion-item>
+    </ion-card>
 
-    <ion-row>
-      <ion-col>
-        <ion-button expand="block" color="danger" (click)="confirmDelete()">
-          <ion-icon name="trash-outline" slot="start"></ion-icon>
-          Excluir
-        </ion-button>
-      </ion-col>
-    </ion-row>
-  </div>
+    <div *ngIf="!isEditing">
+        <ion-row>
+            <ion-col>
+                <ion-button expand="block" color="primary" (click)="enableEdit()">
+                    <ion-icon name="create-outline" slot="start"></ion-icon>
+                    Editar
+                </ion-button>
+            </ion-col>
+        </ion-row>
+        <ion-row>
+            <ion-col>
+                <ion-button expand="block" color="danger" (click)="confirmDelete()">
+                    <ion-icon name="trash-outline" slot="start"></ion-icon>
+                    Excluir
+                </ion-button>
+            </ion-col>
+        </ion-row>
+    </div>
 
-  <div *ngIf="isEditing">
-    <ion-row>
-      <ion-col size="6">
-        <ion-button expand="block" fill="outline" color="medium" (click)="cancelEdit()">
-          <ion-icon name="close-outline" slot="start"></ion-icon>
-          Cancelar
-        </ion-button>
-      </ion-col>
-      <ion-col size="6">
-        <ion-button expand="block" color="success" (click)="saveSale()">
-          <ion-icon name="checkmark-outline" slot="start"></ion-icon>
-          Salvar
-        </ion-button>
-      </ion-col>
-    </ion-row>
-  </div>
-
+    <div *ngIf="isEditing">
+        <ion-row>
+            <ion-col size="6">
+                <ion-button expand="block" fill="outline" color="medium" (click)="cancelEdit()">
+                    <ion-icon name="close-outline" slot="start"></ion-icon>
+                    Cancelar
+                </ion-button>
+            </ion-col>
+            <ion-col size="6">
+                <ion-button expand="block" color="success" (click)="saveSale()">
+                    <ion-icon name="checkmark-outline" slot="start"></ion-icon>
+                    Salvar
+                </ion-button>
+            </ion-col>
+        </ion-row>
+    </div>
 </ion-content>

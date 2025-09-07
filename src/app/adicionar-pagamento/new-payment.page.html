@@ -13,7 +13,7 @@
     <ion-card>
       <ion-item button (click)="selectSale()">
         <ion-label position="stacked" style="font-size: 22px;">Venda *</ion-label>
-        <ion-input [value]="payment.selectedSale" placeholder="Selecionar venda" readonly></ion-input>
+        <ion-input [value]="payment.selectedSaleName" placeholder="Selecionar venda" readonly></ion-input>
         <ion-icon name="chevron-down-outline" slot="end" size="small" class="dropdown-icon">
         </ion-icon>
       </ion-item>
@@ -22,7 +22,7 @@
     <ion-card>
       <ion-item>
         <ion-label position="stacked" style="font-size: 22px;">Valor *</ion-label>
-        <ion-input type="number" [(ngModel)]="payment.value" placeholder="0,00" (ionInput)="formatValue($event)">
+        <ion-input type="text" [(ngModel)]="payment.value" placeholder="0,00" (ionInput)="formatValue($event)">
         </ion-input>
       </ion-item>
     </ion-card>
@@ -30,11 +30,11 @@
     <ion-card>
       <ion-item>
         <ion-label position="stacked" style="font-size: 22px;">Forma de pagamento *</ion-label>
-        <ion-select [(ngModel)]="payment.paymentMethod" placeholder="Selecione" interface="popover">
-          <ion-select-option value="cartao_debito">Cartão de Débito</ion-select-option>
-          <ion-select-option value="cartao_credito">Cartão de Crédito</ion-select-option>
-          <ion-select-option value="dinheiro">Dinheiro</ion-select-option>
-          <ion-select-option value="pix">PIX</ion-select-option>
+        <ion-select [(ngModel)]="payment.paymentMethod" placeholder="Selecione" interface="popover" (ionChange)="updateSummary()">
+          <ion-select-option value="Cartão de Débito">Cartão de Débito</ion-select-option>
+          <ion-select-option value="Cartão de Crédito">Cartão de Crédito</ion-select-option>
+          <ion-select-option value="Dinheiro">Dinheiro</ion-select-option>
+          <ion-select-option value="PIX">PIX</ion-select-option>
         </ion-select>
       </ion-item>
     </ion-card>
@@ -48,7 +48,6 @@
       </ion-item>
     </ion-card>
 
-    <!-- Resumo da venda selecionada -->
     <ion-card *ngIf="selectedSaleDetails && isFormValid()">
       <ion-card-header>
         <ion-card-title style="font-size: 18px;">Resumo da Venda</ion-card-title>

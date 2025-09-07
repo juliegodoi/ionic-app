@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController, ToastController, AlertController } from '@ionic/angular';
+import { NavController, AlertController } from '@ionic/angular';
+import { HttpClient } from '@angular/common/http';
+import { Sale } from '../models/sale.model';
+import { SaleService } from '../services/sale.service';
 
 @Component({
   selector: 'app-new-payment',
@@ -9,44 +12,11 @@ import { NavController, ToastController, AlertController } from '@ionic/angular'
 })
 export class NewPaymentPage implements OnInit {
 
-  // Mock de vendas existentes
-  sales = [
-    { 
-      id: 1, 
-      client: 'Maria Silva', 
-      totalValue: 189.80, 
-      paidValue: 100.00,
-      date: '2024-09-01',
-      description: 'Venda #001 - Maria Silva'
-    },
-    { 
-      id: 2, 
-      client: 'João Santos', 
-      totalValue: 259.90, 
-      paidValue: 0.00,
-      date: '2024-09-02',
-      description: 'Venda #002 - João Santos'
-    },
-    { 
-      id: 3, 
-      client: 'Ana Costa', 
-      totalValue: 129.90, 
-      paidValue: 129.90,
-      date: '2024-09-03',
-      description: 'Venda #003 - Ana Costa'
-    },
-    { 
-      id: 4, 
-      client: 'Pedro Lima', 
-      totalValue: 319.70, 
-      paidValue: 150.00,
-      date: '2024-09-04',
-      description: 'Venda #004 - Pedro Lima'
-    },
-  ];
+  sales: Sale[] = [];
+  selectedSale: Sale | null = null;
 
   payment = {
-    selectedSale: '',
+    selectedSaleName: '', 
     selectedSaleId: null as number | null,
     value: null as number | null,
     paymentMethod: '',
@@ -55,48 +25,56 @@ export class NewPaymentPage implements OnInit {
 
   selectedSaleDetails: any = null;
 
+  paymentMethods = ['Cartão de Débito', 'Cartão de Crédito', 'Dinheiro', 'PIX'];
+
   constructor(
     private navCtrl: NavController,
-    private toastController: ToastController,
-    private alertController: AlertController
+    private http: HttpClient,
+    private alertController: AlertController,
+    private saleService: SaleService
   ) { }
 
   ngOnInit() {
+    this.saleService.sales$.subscribe(sales => {
+      this.sales = sales.filter(sale => sale.totalValue > (sale.paidValue || 0));
+    });
+    this.saleService.getAllSales().subscribe();
   }
 
   isFormValid(): boolean {
-    return this.payment.selectedSale !== '' &&
-      this.payment.value !== null &&
-      this.payment.value > 0 &&
-      this.payment.paymentMethod !== '';
+    const isSaleSelected = !!this.payment.selectedSaleId;
+    const isValueValid = this.payment.value !== null && this.payment.value > 0;
+    const isPaymentMethodSelected = this.payment.paymentMethod !== '';
+
+    if (this.selectedSale) {
+      const remainingBalance = this.selectedSale.totalValue - (this.selectedSale.paidValue || 0);
+      if (this.payment.value! > remainingBalance) {
+        return false;
+      }
+    }
+
+    return isSaleSelected && isValueValid && isPaymentMethodSelected;
   }
 
   async selectSale() {
     const alert = await this.alertController.create({
       header: 'Selecionar Venda',
-      inputs: this.sales
-        .filter(sale => sale.paidValue < sale.totalValue) // Só vendas com saldo pendente
-        .map(sale => ({
-          type: 'radio',
-          label: `${sale.description} - Saldo: R$ ${(sale.totalValue - sale.paidValue).toFixed(2).replace('.', ',')}`,
-          value: sale.id,
-          checked: this.payment.selectedSaleId === sale.id
-        })),
+      inputs: this.sales.map(sale => ({
+        type: 'radio',
+        label: `${sale.cliente.nome} - R$ ${sale.totalValue.toFixed(2).replace('.', ',')}`,
+        value: sale,
+        checked: this.payment.selectedSaleId === sale.id
+      })),
       buttons: [
-        {
-          text: 'Cancelar',
-          role: 'cancel'
-        },
+        { text: 'Cancelar', role: 'cancel' },
         {
           text: 'Selecionar',
-          handler: (selectedSaleId) => {
-            if (selectedSaleId) {
-              const selectedSale = this.sales.find(s => s.id === selectedSaleId);
-              if (selectedSale) {
-                this.payment.selectedSale = selectedSale.description;
-                this.payment.selectedSaleId = selectedSale.id;
-                this.updateSaleDetails(selectedSale);
-              }
+          handler: (selectedSale: Sale) => {
+            if (selectedSale) {
+              this.selectedSale = selectedSale;
+              this.payment.selectedSaleName = `${selectedSale.cliente.nome} - R$ ${selectedSale.totalValue.toFixed(2).replace('.', ',')}`;
+              this.payment.selectedSaleId = selectedSale.id!;
+              this.updateSaleDetails(selectedSale);
             }
           }
         }
@@ -105,64 +83,53 @@ export class NewPaymentPage implements OnInit {
     await alert.present();
   }
 
-  updateSaleDetails(sale: any) {
+  updateSaleDetails(sale: Sale) {
     this.selectedSaleDetails = {
-      client: sale.client,
+      client: sale.cliente.nome,
       totalValue: `R$ ${sale.totalValue.toFixed(2).replace('.', ',')}`,
-      paidValue: `R$ ${sale.paidValue.toFixed(2).replace('.', ',')}`,
-      remainingBalance: `R$ ${(sale.totalValue - sale.paidValue).toFixed(2).replace('.', ',')}`
+      paidValue: `R$ ${sale.paidValue ? sale.paidValue.toFixed(2).replace('.', ',') : '0,00'}`,
+      remainingBalance: `R$ ${(sale.totalValue - (sale.paidValue || 0)).toFixed(2).replace('.', ',')}`
     };
   }
 
   formatValue(event: any) {
-    const value = event.detail.value;
+    const value = event.target.value;
     if (value) {
-      this.payment.value = parseFloat(value);
+      this.payment.value = parseFloat(value.replace(',', '.'));
+    }
+    this.updateSummary();
+  }
+
+  updateSummary() {
+    if (this.selectedSale) {
+      const newPaidValue = (this.selectedSale.paidValue || 0) + (this.payment.value || 0);
+      const newRemainingBalance = this.selectedSale.totalValue - newPaidValue;
+
+      this.selectedSaleDetails.paidValue = `R$ ${newPaidValue.toFixed(2).replace('.', ',')}`;
+      this.selectedSaleDetails.remainingBalance = `R$ ${newRemainingBalance.toFixed(2).replace('.', ',')}`;
     }
   }
 
   async savePayment() {
     if (!this.isFormValid()) {
-      await this.showToast('Por favor, preencha todos os campos obrigatórios', 'warning');
       return;
     }
 
-    // Verificar se o valor do pagamento não excede o saldo devedor
-    const selectedSale = this.sales.find(s => s.id === this.payment.selectedSaleId);
-    if (selectedSale) {
-      const remainingBalance = selectedSale.totalValue - selectedSale.paidValue;
-      if (this.payment.value! > remainingBalance) {
-        await this.showToast(`O valor do pagamento não pode exceder o saldo devedor de R$ ${remainingBalance.toFixed(2).replace('.', ',')}`, 'warning');
-        return;
-      }
-    }
+    const paymentData = {
+      valor: this.payment.value,
+      formaPagamento: this.payment.paymentMethod,
+      observacoes: this.payment.observations
+    };
 
-    try {
-      // Simular salvamento do pagamento
-      console.log('Pagamento a ser salvo:', this.payment);
-      
-      // Atualizar o valor pago da venda (simulação)
-      if (selectedSale && this.payment.value) {
-        selectedSale.paidValue += this.payment.value;
-      }
-
-      await this.showToast('Pagamento adicionado com sucesso!', 'success');
-      this.navCtrl.back();
-
-    } catch (error) {
-      await this.showToast('Erro ao adicionar pagamento', 'danger');
-      console.error('Erro:', error);
-    }
+    this.http.post(`http://localhost:8080/pagamentos/${this.payment.selectedSaleId}`, paymentData)
+      .subscribe({
+        next: (response) => {
+          this.saleService.getAllSales().subscribe(() => {
+            this.navCtrl.back();
+          });
+        },
+        error: (error) => {
+        }
+      });
   }
-
-  async showToast(message: string, color: string) {
-    const toast = await this.toastController.create({
-      message: message,
-      duration: 3000,
-      position: 'top',
-      color: color
-    });
-    await toast.present();
-  }
-
 }

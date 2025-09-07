@@ -18,6 +18,7 @@ export class NewSalePage implements OnInit {
     formaPagamento: '',
     condicoes: '',
     totalValue: 0,
+    paidValue: 0,
     date: new Date().toLocaleDateString('pt-BR'),
   };
 
@@ -98,7 +99,7 @@ export class NewSalePage implements OnInit {
       produtos: this.sale.produtos.map(p => ({ id: p.id!, unidades: 1 })),
       condicoes: this.sale.condicoes,
       formaPagamento: this.sale.formaPagamento,
-      date: new Date().toISOString()
+      date: new Date().toISOString(),
     };
 
     this.saleService.createSale(saleToSend as any).subscribe({

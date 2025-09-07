@@ -6,6 +6,14 @@ export interface SaleProduct {
     unidades?: number;
 }
 
+export interface Payment {
+    id?: number;
+    valor: number;
+    formaPagamento: string;
+    observacoes?: string;
+    date?: string;
+}
+
 export interface Sale {
     id?: number;
     cliente: Client;
@@ -14,6 +22,8 @@ export interface Sale {
     formaPagamento: string;
     totalValue: number;
     date: string;
+    paidValue: number;
+    payments?: Payment[];
 }
 
 export interface BackendSale {
@@ -23,7 +33,7 @@ export interface BackendSale {
     produtos: SaleProduct[];
     condicoes?: string;
     formaPagamento: string;
-    date: string; // Adicionado aqui
+    date: string;
 }
 
 export interface SalesGroup {

@@ -3,9 +3,8 @@ import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { NavController, AlertController, ModalController, IonicModule } from '@ionic/angular';
 import { SaleService } from '../services/sale.service';
-import { Sale, BackendSale } from '../models/sale.model';
+import { Sale, BackendSale, Payment } from '../models/sale.model';
 import { Product } from '../services/product.service';
-import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-products-list-modal',
@@ -89,6 +88,14 @@ export class SaleDetailsPage implements OnInit {
     return this.sale?.produtos?.reduce((total, item) => total + (item.preco), 0) || 0;
   }
 
+  getTotalPaid(): number {
+    return this.sale?.payments?.reduce((total, payment) => total + (payment.valor), 0) || 0;
+  }
+
+  getRemainingBalance(): number {
+    return this.getTotalValue() - this.getTotalPaid();
+  }
+
   enableEdit() {
     this.isEditing = true;
     this.draftSale = { ...this.sale };
@@ -111,13 +118,12 @@ export class SaleDetailsPage implements OnInit {
       produtos: this.draftSale.produtos.map((p: any) => ({ id: p.id!, unidades: 1 })),
       condicoes: this.draftSale.condicoes,
       formaPagamento: this.draftSale.formaPagamento,
-      date: this.sale?.date!
+      date: this.sale?.date!,
     };
 
     this.saleService.updateSale(this.draftSale.id!, saleToSend).subscribe({
       next: () => {
         this.isEditing = false;
-        // Redireciona após salvar
         this.navCtrl.navigateBack('/tabs/tab4');
       },
       error: () => { }

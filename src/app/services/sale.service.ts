@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, tap, catchError, of, switchMap, forkJoin } from 'rxjs';
-import { Sale, BackendSale } from '../models/sale.model';
+import { Sale, BackendSale, Payment } from '../models/sale.model';
 import { Client, ClientService } from './client.service';
 import { Product, ProductService } from './product.service';
 
@@ -54,7 +54,9 @@ export class SaleService {
             condicoes: newSale.condicoes,
             formaPagamento: newSale.formaPagamento,
             date: new Date().toLocaleDateString('pt-BR'),
-            totalValue: 0
+            totalValue: 0,
+            paidValue: 0,
+            payments: []
         };
         optimisticSale.totalValue = optimisticSale.produtos.reduce((sum, p) => sum + p.preco, 0);
 
@@ -82,7 +84,7 @@ export class SaleService {
             ...originalSale,
             condicoes: updatedSale.condicoes,
             formaPagamento: updatedSale.formaPagamento,
-            date: new Date().toLocaleDateString('pt-BR')
+            date: new Date().toLocaleDateString('pt-BR'),
         };
 
         this.updateSaleInCache(id, optimisticUpdate);
@@ -116,17 +118,26 @@ export class SaleService {
     private getSaleDetailsFromBackend(sale: any): Observable<Sale> {
         const client$ = this.clientService.getClientById(sale.cliente.id);
         const productRequests = (sale.produtos || []).map((p: any) => this.productService.getProductById(p.id));
+        const payments$ = this.http.get<Payment[]>(`${this.apiUrl}/${sale.id}/pagamentos`).pipe(
+            catchError(() => of([])) // Em caso de erro, retorna um array vazio
+        );
 
         return forkJoin({
             cliente: client$,
-            produtos: forkJoin(productRequests) as Observable<Product[]>
+            produtos: forkJoin(productRequests) as Observable<Product[]>,
+            payments: payments$ // Adicione a requisição de pagamentos
         }).pipe(
             switchMap(details => {
                 const detailedSale: Sale = {
                     ...sale,
                     cliente: details.cliente,
                     produtos: details.produtos,
+                    payments: details.payments.map(payment => ({
+                        ...payment,
+                        date: new Date(payment.date!).toLocaleDateString('pt-BR')
+                    })), // Formata a data dos pagamentos
                     totalValue: details.produtos.reduce((sum, p) => sum + p.preco, 0),
+                    paidValue: details.payments.reduce((sum, p) => sum + p.valor, 0), 
                     date: new Date(sale.date).toLocaleDateString('pt-BR')
                 };
                 return of(detailedSale);
