@@ -5,6 +5,7 @@ import { NavController, AlertController, ModalController, IonicModule } from '@i
 import { SaleService } from '../services/sale.service';
 import { Sale, BackendSale } from '../models/sale.model';
 import { Product } from '../services/product.service';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-products-list-modal',
@@ -59,7 +60,8 @@ export class ProductsListModalComponent {
 export class SaleDetailsPage implements OnInit {
   sale: Sale | undefined;
   isEditing: boolean = false;
-  draftSale: Sale | undefined;
+  draftSale: any;
+  paymentOptions: string[] = ['cartao_debito', 'cartao_credito', 'dinheiro', 'pix'];
 
   constructor(
     private route: ActivatedRoute,
@@ -89,6 +91,7 @@ export class SaleDetailsPage implements OnInit {
 
   enableEdit() {
     this.isEditing = true;
+    this.draftSale = { ...this.sale };
   }
 
   cancelEdit() {
@@ -105,14 +108,17 @@ export class SaleDetailsPage implements OnInit {
 
     const saleToSend: BackendSale = {
       cliente: { id: this.draftSale.cliente.id! },
-      produtos: this.draftSale.produtos.map(p => ({ id: p.id!, unidades: 1 })),
+      produtos: this.draftSale.produtos.map((p: any) => ({ id: p.id!, unidades: 1 })),
       condicoes: this.draftSale.condicoes,
       formaPagamento: this.draftSale.formaPagamento,
+      date: this.sale?.date!
     };
 
     this.saleService.updateSale(this.draftSale.id!, saleToSend).subscribe({
       next: () => {
         this.isEditing = false;
+        // Redireciona após salvar
+        this.navCtrl.navigateBack('/tabs/tab4');
       },
       error: () => { }
     });

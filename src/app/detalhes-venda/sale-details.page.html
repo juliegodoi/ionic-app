@@ -17,27 +17,33 @@
     <ion-card-content>
       <ion-item>
         <ion-label position="stacked">Cliente</ion-label>
-        <ion-input [value]="sale?.cliente?.nome" [readonly]="!isEditing"></ion-input>
+        <ion-input [value]="sale?.cliente?.nome" [readonly]="true"></ion-input>
       </ion-item>
 
       <ion-item>
         <ion-label position="stacked">Data</ion-label>
-        <ion-input [value]="sale?.date" [readonly]="!isEditing" placeholder="00/00/0000" maxlength="10"></ion-input>
+        <ion-input [value]="sale?.date" [readonly]="true"></ion-input>
       </ion-item>
 
       <ion-item>
         <ion-label position="stacked">Forma de pagamento</ion-label>
-        <ion-input [value]="sale?.formaPagamento" [readonly]="!isEditing"></ion-input>
+        <ion-select [(ngModel)]="draftSale.formaPagamento" placeholder="Selecione" interface="popover"
+          [disabled]="!isEditing">
+          <ion-select-option value="cartao_debito">Cartão de Débito</ion-select-option>
+          <ion-select-option value="cartao_credito">Cartão de Crédito</ion-select-option>
+          <ion-select-option value="dinheiro">Dinheiro</ion-select-option>
+          <ion-select-option value="pix">PIX</ion-select-option>
+        </ion-select>
       </ion-item>
 
       <ion-item>
         <ion-label position="stacked">Condições</ion-label>
-        <ion-textarea [value]="sale?.condicoes" [readonly]="!isEditing" rows="3" autoGrow="true"></ion-textarea>
+        <ion-textarea [(ngModel)]="draftSale.condicoes" [readonly]="!isEditing" rows="3" autoGrow="true"></ion-textarea>
       </ion-item>
 
       <ion-item>
         <ion-label position="stacked">Valor</ion-label>
-        <ion-input [value]="'R$ ' + getTotalValue().toFixed(2)" readonly></ion-input>
+        <ion-input [value]="'R$ ' + getTotalValue().toFixed(2)" [readonly]="true"></ion-input>
       </ion-item>
     </ion-card-content>
   </ion-card>
@@ -52,17 +58,41 @@
     </ion-card-content>
   </ion-card>
 
-  <ion-row>
-    <ion-col>
-      <ion-button expand="block" color="primary" *ngIf="!isEditing" (click)="enableEdit()">Editar</ion-button>
-      <ion-button expand="block" color="success" *ngIf="isEditing" (click)="saveSale()">Salvar</ion-button>
-    </ion-col>
-  </ion-row>
+  <div *ngIf="!isEditing">
+    <ion-row>
+      <ion-col>
+        <ion-button expand="block" color="primary" (click)="enableEdit()">
+          <ion-icon name="create-outline" slot="start"></ion-icon>
+          Editar
+        </ion-button>
+      </ion-col>
+    </ion-row>
 
-  <ion-row *ngIf="!isEditing">
-    <ion-col>
-      <ion-button expand="block" color="danger" (click)="confirmDelete()">Excluir</ion-button>
-    </ion-col>
-  </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-button expand="block" color="danger" (click)="confirmDelete()">
+          <ion-icon name="trash-outline" slot="start"></ion-icon>
+          Excluir
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </div>
+
+  <div *ngIf="isEditing">
+    <ion-row>
+      <ion-col size="6">
+        <ion-button expand="block" fill="outline" color="medium" (click)="cancelEdit()">
+          <ion-icon name="close-outline" slot="start"></ion-icon>
+          Cancelar
+        </ion-button>
+      </ion-col>
+      <ion-col size="6">
+        <ion-button expand="block" color="success" (click)="saveSale()">
+          <ion-icon name="checkmark-outline" slot="start"></ion-icon>
+          Salvar
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </div>
 
 </ion-content>

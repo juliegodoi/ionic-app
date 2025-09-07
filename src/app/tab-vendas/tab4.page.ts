@@ -48,7 +48,22 @@ export class Tab4Page implements OnInit, OnDestroy {
       return clientName.includes(searchTerm) || sale.date.includes(searchTerm);
     });
 
-    this.filteredSales = filtered.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+    this.filteredSales = filtered.sort((a, b) => {
+      const dateA = this.parseDate(a.date);
+      const dateB = this.parseDate(b.date);
+      return dateB.getTime() - dateA.getTime();
+    });
+  }
+
+  private parseDate(dateString: string): Date {
+    const parts = dateString.split('/');
+    if (parts.length === 3) {
+      const day = parseInt(parts[0], 10);
+      const month = parseInt(parts[1], 10) - 1;
+      const year = parseInt(parts[2], 10);
+      return new Date(year, month, day);
+    }
+    return new Date(NaN);
   }
 
   addNewSale() {

@@ -1,4 +1,3 @@
-// src/app/services/sale.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, tap, catchError, of, switchMap, forkJoin } from 'rxjs';
@@ -75,21 +74,21 @@ export class SaleService {
         const originalSales = this._sales.value;
         const originalSale = originalSales.find(s => s.id === id);
 
+        if (!originalSale) {
+            return of(null);
+        }
+
         const optimisticUpdate: Sale = {
-            id,
-            cliente: this.clientService.getClientsCache().find((c: Client) => c.id === updatedSale.cliente.id)!,
-            produtos: this.productService.getProductsCache().filter((p: Product) => updatedSale.produtos.some(sp => sp.id === p.id)),
+            ...originalSale,
             condicoes: updatedSale.condicoes,
             formaPagamento: updatedSale.formaPagamento,
-            date: originalSale?.date!,
-            totalValue: 0
+            date: new Date().toLocaleDateString('pt-BR')
         };
-        optimisticUpdate.totalValue = optimisticUpdate.produtos.reduce((sum, p) => sum + p.preco, 0);
 
         this.updateSaleInCache(id, optimisticUpdate);
 
         return this.http.put(`${this.apiUrl}/${id}`, updatedSale).pipe(
-            tap(() => this.getSaleById(id).subscribe()),
+            tap(() => this.getAllSales().subscribe()),
             catchError(error => {
                 if (originalSale) {
                     this.updateSaleInCache(id, originalSale);
@@ -105,9 +104,7 @@ export class SaleService {
         if (!saleToDelete) {
             return of(null);
         }
-
         this.removeSaleFromCache(id);
-
         return this.http.request('delete', `${this.apiUrl}/${id}`, { body: saleBody }).pipe(
             catchError(error => {
                 this.addSaleToCache(saleToDelete);

@@ -4,23 +4,30 @@
     <ion-searchbar placeholder="Buscar venda" debounce="300" (ionInput)="searchSales($event)">
     </ion-searchbar>
 
-    <ion-card *ngFor="let sale of filteredSales" class="sale-card">
+    <div *ngIf="filteredSales.length === 0" class="ion-text-center ion-margin-top">
+      <ion-icon name="clipboard-outline" size="large" color="medium"></ion-icon>
+      <p>Nenhuma venda cadastrada</p>
+    </div>
+
+    <ion-card class="sale-card" *ngFor="let sale of filteredSales">
       <ion-item button detail="true" lines="none" class="ion-activatable ripple-parent" (click)="openSaleDetails(sale)">
         <ion-icon name="server" slot="start" color="primary"></ion-icon>
+
         <ion-label>
           <h2>{{ sale.cliente.nome }}</h2>
           <p>{{ sale.date }}</p>
           <p style="color: var(--ion-text-color);">R$ {{ sale.totalValue?.toFixed(2) || '0.00' }}</p>
           <p>{{ sale.produtos?.length || 0 }} produtos</p>
         </ion-label>
+
         <ion-ripple-effect></ion-ripple-effect>
       </ion-item>
     </ion-card>
   </div>
 
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-      <ion-fab-button (click)="addNewSale()">
-        <ion-icon name="add"></ion-icon>
-      </ion-fab-button>
-    </ion-fab>
+    <ion-fab-button (click)="addNewSale()">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
 </ion-content>

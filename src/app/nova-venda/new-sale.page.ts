@@ -95,9 +95,10 @@ export class NewSalePage implements OnInit {
 
     const saleToSend: BackendSale = {
       cliente: { id: this.sale.cliente.id! },
-      produtos: this.sale.produtos.map(p => ({ id: p.id!, unidades: 1 })), // Assumindo uma unidade por produto
+      produtos: this.sale.produtos.map(p => ({ id: p.id!, unidades: 1 })),
       condicoes: this.sale.condicoes,
       formaPagamento: this.sale.formaPagamento,
+      date: new Date().toISOString()
     };
 
     this.saleService.createSale(saleToSend as any).subscribe({

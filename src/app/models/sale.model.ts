@@ -23,6 +23,7 @@ export interface BackendSale {
     produtos: SaleProduct[];
     condicoes?: string;
     formaPagamento: string;
+    date: string; // Adicionado aqui
 }
 
 export interface SalesGroup {
