@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { NavController, AlertController } from '@ionic/angular';
+import { ProductService, Product } from '../services/product.service';
 
 @Component({
   selector: 'app-product-details',
@@ -9,60 +10,68 @@ import { NavController, AlertController } from '@ionic/angular';
   standalone: false,
 })
 export class ProductDetailsPage implements OnInit {
-  product: any = {};
+  product: Product = {
+    nome: '',
+    preco: 0,
+    unidades: 0,
+    observacoes: ''
+  };
   isEditing = false;
+  originalProduct: Product = {
+    nome: '',
+    preco: 0,
+    unidades: 0
+  };
 
   constructor(
     private route: ActivatedRoute,
     private navCtrl: NavController,
-    private alertCtrl: AlertController
+    private alertCtrl: AlertController,
+    private productService: ProductService
   ) { }
 
   ngOnInit() {
-    const productId = this.route.snapshot.paramMap.get('id') ?? '';
-    this.loadProduct(productId);
+    const productId = this.route.snapshot.paramMap.get('id');
+    if (productId) {
+      this.loadProduct(parseInt(productId));
+    }
   }
 
-  loadProduct(id: string) {
-    const mockProducts = [
-      { id: '1', name: 'Camiseta Branca P', price: '59.90', stock: 22, observations: 'Produto em algodão 100%, tamanho P' },
-      { id: '2', name: 'Camiseta Branca M', price: '59.90', stock: 18, observations: 'Produto em algodão 100%, tamanho M' },
-      { id: '3', name: 'Camiseta Branca G', price: '59.90', stock: 15, observations: 'Produto em algodão 100%, tamanho G' },
-      { id: '4', name: 'Camiseta Branca GG', price: '59.90', stock: 12, observations: 'Produto em algodão 100%, tamanho GG' },
-      { id: '5', name: 'Camiseta Preta P', price: '59.90', stock: 25, observations: 'Produto em algodão 100%, cor preta, tamanho P' },
-      { id: '6', name: 'Camiseta Preta M', price: '59.90', stock: 20, observations: 'Produto em algodão 100%, cor preta, tamanho M' },
-      { id: '7', name: 'Calça Jeans 38', price: '129.90', stock: 8, observations: 'Calça jeans tradicional, numeração 38' },
-    ];
-
-    const foundProduct = mockProducts.find(p => p.id === id);
-    
-    if (foundProduct) {
-      this.product = { ...foundProduct };
-    } else {
-      this.product = {
-        id,
-        name: 'Produto não encontrado',
-        price: '0.00',
-        stock: 0,
-        observations: ''
-      };
-    }
+  loadProduct(id: number) {
+    this.productService.getProductById(id).subscribe({
+      next: (product) => {
+        this.product = product;
+        this.originalProduct = { ...product };
+      },
+      error: () => {
+        this.navCtrl.back();
+      }
+    });
   }
 
   enableEdit() {
     this.isEditing = true;
+    this.originalProduct = { ...this.product };
+  }
+
+  cancelEdit() {
+    this.product = { ...this.originalProduct };
+    this.isEditing = false;
   }
 
   saveProduct() {
-    if (!this.product.name || !this.product.price) {
-      this.showAlert('Erro', 'Nome e preço são obrigatórios!');
+    if (!this.product.nome.trim() || this.product.preco === null || this.product.preco === undefined) {
       return;
     }
 
-    console.log('Produto atualizado:', this.product);
-    
-    this.showAlert('Sucesso', 'Produto atualizado com sucesso!');
-    this.isEditing = false;
+    this.productService.updateProduct(this.product.id!, this.product).subscribe({
+      next: () => {
+        this.isEditing = false;
+        this.navCtrl.navigateBack('/tabs/tab3');
+      },
+      error: () => {
+      }
+    });
   }
 
   async confirmDelete() {
@@ -77,22 +86,16 @@ export class ProductDetailsPage implements OnInit {
         }
       ]
     });
-
     await alert.present();
   }
 
   deleteProduct() {
-    console.log('Produto excluído:', this.product.id);
-    this.navCtrl.navigateBack('/tabs/tab3');
-  }
-
-  async showAlert(header: string, message: string) {
-    const alert = await this.alertCtrl.create({
-      header,
-      message,
-      buttons: ['OK']
+    this.productService.deleteProduct(this.product.id!).subscribe({
+      next: () => {
+        this.navCtrl.navigateBack('/tabs/tab3');
+      },
+      error: () => {
+      }
     });
-
-    await alert.present();
   }
 }

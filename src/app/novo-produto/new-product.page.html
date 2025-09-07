@@ -1,7 +1,7 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="/tabs/tab1"></ion-back-button>
+      <ion-back-button defaultHref="/tabs/tab3"></ion-back-button>
     </ion-buttons>
     <ion-title>Novo produto</ion-title>
   </ion-toolbar>
@@ -9,68 +9,38 @@
 
 <ion-content [fullscreen]="true">
   <div class="ion-padding">
-    
     <ion-card>
       <ion-item>
         <ion-label position="stacked" style="font-size: 22px;">Título *</ion-label>
-        <ion-input 
-          [(ngModel)]="product.title" 
-          placeholder="Informe o título do produto" 
-          type="text" 
-          required
-        ></ion-input>
+        <ion-input [(ngModel)]="product.nome" placeholder="Informe o título do produto" type="text"
+          required></ion-input>
       </ion-item>
     </ion-card>
-
     <ion-card>
       <ion-item>
         <ion-label position="stacked" style="font-size: 22px;">Valor *</ion-label>
-        <ion-input 
-          [(ngModel)]="product.value" 
-          placeholder="R$ 0,00" 
-          type="number" 
-          required
-        ></ion-input>
+        <ion-input [(ngModel)]="product.preco" placeholder="0,00" type="number" required></ion-input>
       </ion-item>
     </ion-card>
-
     <ion-card>
       <ion-item>
         <ion-label position="stacked" style="font-size: 22px;">Estoque *</ion-label>
-        <ion-input 
-          [(ngModel)]="product.stock" 
-          placeholder="Quantidade em estoque" 
-          type="number"
-          required
-        ></ion-input>
+        <ion-input [(ngModel)]="product.unidades" placeholder="Quantidade em estoque" type="number"
+          required></ion-input>
       </ion-item>
     </ion-card>
-
     <ion-card>
       <ion-item>
         <ion-label position="stacked" style="font-size: 22px;">Observações</ion-label>
-        <ion-textarea 
-          [(ngModel)]="product.observations" 
-          placeholder="Digite suas observações aqui..." 
-          rows="6"
-          autoGrow="true"
-        ></ion-textarea>
+        <ion-textarea [(ngModel)]="product.observacoes" placeholder="Digite suas observações aqui..." rows="6"
+          autoGrow="true"></ion-textarea>
       </ion-item>
     </ion-card>
-
   </div>
-
   <div class="ion-padding">
-    <ion-button 
-      expand="block" 
-      fill="solid"
-      color="primary"
-      (click)="saveProduct()"
-      [disabled]="!isFormValid()"
-      style="height: 48px;"
-    >
+    <ion-button expand="block" fill="solid" color="primary" (click)="saveProduct()" [disabled]="!isFormValid()"
+      style="height: 48px;">
       Salvar
     </ion-button>
   </div>
-
 </ion-content>

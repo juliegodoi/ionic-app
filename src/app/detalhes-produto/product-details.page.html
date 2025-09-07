@@ -8,7 +8,6 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-
   <ion-card>
     <ion-card-header>
       <ion-card-title>Informações</ion-card-title>
@@ -17,23 +16,23 @@
     <ion-card-content>
       <ion-item>
         <ion-label position="stacked">Título</ion-label>
-        <ion-input [(ngModel)]="product.name" [readonly]="!isEditing"></ion-input>
+        <ion-input [(ngModel)]="product.nome" [readonly]="!isEditing"></ion-input>
       </ion-item>
-
+      
       <ion-item>
         <ion-label position="stacked">Valor</ion-label>
-        <ion-input [(ngModel)]="product.price" [readonly]="!isEditing" type="number"></ion-input>
+        <ion-input [(ngModel)]="product.preco" [readonly]="!isEditing" type="number"></ion-input>
       </ion-item>
-
+      
       <ion-item>
         <ion-label position="stacked">Estoque</ion-label>
-        <ion-input [(ngModel)]="product.stock" [readonly]="!isEditing" type="number"></ion-input>
+        <ion-input [(ngModel)]="product.unidades" [readonly]="!isEditing" type="number"></ion-input>
       </ion-item>
-
+      
       <ion-item>
         <ion-label position="stacked">Observações</ion-label>
         <ion-textarea 
-          [(ngModel)]="product.observations" 
+          [(ngModel)]="product.observacoes" 
           [readonly]="!isEditing"
           rows="4"
           autoGrow="true"
@@ -42,17 +41,40 @@
     </ion-card-content>
   </ion-card>
 
-  <ion-row>
-    <ion-col>
-      <ion-button expand="block" color="primary" *ngIf="!isEditing" (click)="enableEdit()">Editar</ion-button>
-      <ion-button expand="block" color="success" *ngIf="isEditing" (click)="saveProduct()">Salvar</ion-button>
-    </ion-col>
-  </ion-row>
+  <div *ngIf="!isEditing">
+    <ion-row>
+      <ion-col>
+        <ion-button expand="block" color="primary" (click)="enableEdit()">
+          <ion-icon name="create-outline" slot="start"></ion-icon>
+          Editar
+        </ion-button>
+      </ion-col>
+    </ion-row>
 
-  <ion-row *ngIf="!isEditing">
-    <ion-col>
-      <ion-button expand="block" color="danger" (click)="confirmDelete()">Excluir</ion-button>
-    </ion-col>
-  </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-button expand="block" color="danger" (click)="confirmDelete()">
+          <ion-icon name="trash-outline" slot="start"></ion-icon>
+          Excluir
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </div>
 
+  <div *ngIf="isEditing">
+    <ion-row>
+      <ion-col size="6">
+        <ion-button expand="block" fill="outline" color="medium" (click)="cancelEdit()">
+          <ion-icon name="close-outline" slot="start"></ion-icon>
+          Cancelar
+        </ion-button>
+      </ion-col>
+      <ion-col size="6">
+        <ion-button expand="block" color="success" (click)="saveProduct()">
+          <ion-icon name="checkmark-outline" slot="start"></ion-icon>
+          Salvar
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </div>
 </ion-content>

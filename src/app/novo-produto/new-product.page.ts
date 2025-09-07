@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController, ToastController } from '@ionic/angular';
+import { NavController } from '@ionic/angular';
+import { ProductService, Product } from '../services/product.service';
 
 @Component({
   selector: 'app-new-product',
@@ -8,17 +9,16 @@ import { NavController, ToastController } from '@ionic/angular';
   standalone: false,
 })
 export class NewProductPage implements OnInit {
-
-  product = {
-    title: '',
-    value: '',
-    stock: '',
-    observations: ''
+  product: Omit<Product, 'id'> = {
+    nome: '',
+    preco: 0,
+    unidades: 0,
+    observacoes: ''
   };
 
   constructor(
     private navCtrl: NavController,
-    private toastController: ToastController
+    private productService: ProductService
   ) { }
 
   ngOnInit() {
@@ -26,39 +26,25 @@ export class NewProductPage implements OnInit {
 
   isFormValid(): boolean {
     return (
-      this.product.title.trim() !== '' &&
-      this.product.value.toString().trim() !== '' &&
-      this.product.stock.toString().trim() !== ''
+      this.product.nome.trim() !== '' &&
+      this.product.preco !== null &&
+      this.product.preco >= 0 &&
+      this.product.unidades !== null &&
+      this.product.unidades >= 0
     );
   }
 
-  async saveProduct() {
+  saveProduct() {
     if (!this.isFormValid()) {
-      await this.showToast('Por favor, preencha os campos obrigatórios', 'warning');
       return;
     }
 
-    try {
-      console.log('Produto a ser salvo:', this.product);
-
-      await this.showToast('Produto salvo com sucesso!', 'success');
-
-      this.navCtrl.back();
-
-    } catch (error) {
-      await this.showToast('Erro ao salvar produto', 'danger');
-      console.error('Erro:', error);
-    }
-  }
-
-  async showToast(message: string, color: string) {
-    const toast = await this.toastController.create({
-      message: message,
-      duration: 3000,
-      position: 'top',
-      color: color
+    this.productService.createProduct(this.product as Product).subscribe({
+      next: () => {
+        this.navCtrl.navigateBack('/tabs/tab3');
+      },
+      error: () => {
+      }
     });
-    await toast.present();
   }
-
 }

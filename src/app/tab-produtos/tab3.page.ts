@@ -1,5 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NavController } from '@ionic/angular';
+import { ProductService, Product } from '../services/product.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-tab3',
@@ -7,48 +9,62 @@ import { NavController } from '@ionic/angular';
   styleUrls: ['tab3.page.scss'],
   standalone: false,
 })
-export class Tab3Page {
+export class Tab3Page implements OnInit, OnDestroy {
+  products: Product[] = [];
+  filteredProducts: Product[] = [];
+  private productsSubscription?: Subscription;
 
-  products = [
-    { id: 1, name: 'Camiseta Branca P', price: '59.90', stock: 22 },
-    { id: 2, name: 'Camiseta Branca M', price: '59.90', stock: 18 },
-    { id: 3, name: 'Camiseta Branca G', price: '59.90', stock: 15 },
-    { id: 4, name: 'Camiseta Branca GG', price: '59.90', stock: 12 },
-    { id: 5, name: 'Camiseta Preta P', price: '59.90', stock: 25 },
-    { id: 6, name: 'Camiseta Preta M', price: '59.90', stock: 20 },
-    { id: 7, name: 'Calça Jeans 38', price: '129.90', stock: 8 },
-  ];
+  constructor(
+    private navCtrl: NavController,
+    private productService: ProductService
+  ) {}
 
-  filteredProducts = [...this.products];
+  ngOnInit() {
+    this.loadProducts();
+  }
 
-  constructor(private navCtrl: NavController) {
-    this.filteredProducts = this.products;
+  ngOnDestroy() {
+    if (this.productsSubscription) {
+      this.productsSubscription.unsubscribe();
+    }
+  }
+
+  ionViewWillEnter() {
+    this.loadProducts();
+  }
+
+  private loadProducts() {
+    this.productsSubscription = this.productService.products$.subscribe(
+      (products) => {
+        this.products = products;
+        this.filteredProducts = [...products];
+      }
+    );
+    this.productService.getAllProducts().subscribe(
+      (products) => {
+        this.products = products;
+        this.filteredProducts = [...products];
+      }
+    );
   }
 
   searchProducts(event: any) {
-    const searchTerm = event.target.value.toLowerCase();
-
+    const searchTerm = event.target.value?.toLowerCase() || '';
     if (searchTerm.trim() === '') {
-      this.filteredProducts = this.products;
+      this.filteredProducts = [...this.products];
     } else {
       this.filteredProducts = this.products.filter(product =>
-        product.name.toLowerCase().includes(searchTerm) ||
-        product.price.includes(searchTerm)
+        product.nome.toLowerCase().includes(searchTerm) ||
+        product.preco.toString().includes(searchTerm)
       );
     }
   }
 
-  openProductDetails(product: any) {
-    console.log('Abrir detalhes do produto:', product);
+  openProductDetails(product: Product) {
     this.navCtrl.navigateForward(`/product-details/${product.id}`);
   }
+
   addNewProduct() {
     this.navCtrl.navigateForward('/new-product');
   }
-
-
-  formatPrice(price: string): string {
-    return `R$ ${price}`;
-  }
-
 }
