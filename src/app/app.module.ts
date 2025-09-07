@@ -9,6 +9,7 @@ import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { SaleService } from './services/sale.service';
 import { ClientService } from './services/client.service';
 
 registerLocaleData(localePt);
@@ -20,8 +21,9 @@ registerLocaleData(localePt);
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     { provide: LOCALE_ID, useValue: 'pt-BR' },
     provideHttpClient(withInterceptorsFromDi()),
+    SaleService,
     ClientService
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule { }

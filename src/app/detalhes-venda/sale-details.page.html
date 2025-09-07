@@ -17,25 +17,22 @@
     <ion-card-content>
       <ion-item>
         <ion-label position="stacked">Cliente</ion-label>
-        <ion-input [(ngModel)]="sale.clientName" [readonly]="!isEditing"></ion-input>
+        <ion-input [value]="sale?.cliente?.nome" [readonly]="!isEditing"></ion-input>
       </ion-item>
 
       <ion-item>
-        <ion-label position="stacked">Data da venda</ion-label>
-        <ion-input [(ngModel)]="sale.date" [readonly]="!isEditing" placeholder="00/00/0000" maxlength="10"
-          inputmode="numeric">
-        </ion-input>
+        <ion-label position="stacked">Data</ion-label>
+        <ion-input [value]="sale?.date" [readonly]="!isEditing" placeholder="00/00/0000" maxlength="10"></ion-input>
       </ion-item>
-      
+
       <ion-item>
         <ion-label position="stacked">Forma de pagamento</ion-label>
-        <ion-input [(ngModel)]="sale.paymentMethod" [readonly]="!isEditing"></ion-input>
+        <ion-input [value]="sale?.formaPagamento" [readonly]="!isEditing"></ion-input>
       </ion-item>
 
       <ion-item>
         <ion-label position="stacked">Condições</ion-label>
-        <ion-textarea [(ngModel)]="sale.paymentCondition" [readonly]="!isEditing" rows="3"
-          autoGrow="true"></ion-textarea>
+        <ion-textarea [value]="sale?.condicoes" [readonly]="!isEditing" rows="3" autoGrow="true"></ion-textarea>
       </ion-item>
 
       <ion-item>
@@ -50,7 +47,7 @@
       <ion-card-title>Produtos</ion-card-title>
     </ion-card-header>
     <ion-card-content class="products-row">
-      <span style="color: var(--ion-text-color);">{{ sale.products?.length || 0 }} produtos relacionados</span>
+      <span style="color: var(--ion-text-color);">{{ sale?.produtos?.length || 0 }} produtos relacionados</span>
       <ion-icon name="eye-outline" size="small"></ion-icon>
     </ion-card-content>
   </ion-card>

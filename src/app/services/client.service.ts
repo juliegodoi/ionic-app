@@ -16,10 +16,10 @@ export interface Client {
 })
 export class ClientService {
     private readonly API_URL = 'http://localhost:8080/clientes';
-    
+
     private clientsCache: Client[] = [];
     private cacheLoaded = false;
-    
+
     private clientsSubject = new BehaviorSubject<Client[]>([]);
     public clients$ = this.clientsSubject.asObservable();
 
@@ -35,8 +35,7 @@ export class ClientService {
                 this.clientsSubject.next([...this.clientsCache]);
             },
             error: (error) => {
-                console.error('Erro ao carregar dados iniciais:', error);
-                this.cacheLoaded = true; 
+                this.cacheLoaded = true;
                 this.clientsSubject.next([]);
             }
         });
@@ -50,9 +49,13 @@ export class ClientService {
         }
     }
 
+    public getClientsCache(): Client[] {
+        return this.clientsCache;
+    }
+
     getClientById(id: number): Observable<Client> {
         const cachedClient = this.clientsCache.find(client => client.id === id);
-        
+
         if (cachedClient) {
             return of({ ...cachedClient });
         } else {
@@ -70,7 +73,7 @@ export class ClientService {
 
     getClientByName(nome: string): Observable<Client[]> {
         if (this.cacheLoaded) {
-            const filteredClients = this.clientsCache.filter(client => 
+            const filteredClients = this.clientsCache.filter(client =>
                 client.nome.toLowerCase().includes(nome.toLowerCase())
             );
             return of(filteredClients);
@@ -86,7 +89,6 @@ export class ClientService {
                 this.clientsSubject.next([...this.clientsCache]);
             }),
             catchError(error => {
-                console.error('Erro ao criar cliente:', error);
                 return throwError(error);
             })
         );
@@ -102,7 +104,6 @@ export class ClientService {
                 }
             }),
             catchError(error => {
-                console.error('Erro ao atualizar cliente:', error);
                 return throwError(error);
             })
         );
@@ -118,7 +119,6 @@ export class ClientService {
                 }
             }),
             catchError(error => {
-                console.error('Erro ao excluir cliente:', error);
                 return throwError(error);
             })
         );
@@ -130,9 +130,7 @@ export class ClientService {
                 this.clientsCache = clients;
                 this.clientsSubject.next([...this.clientsCache]);
             },
-            error: (error) => {
-                console.error('Erro ao atualizar cache:', error);
-            }
+            error: (error) => { }
         });
     }
 

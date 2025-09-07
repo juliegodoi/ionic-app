@@ -1,5 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NavController } from '@ionic/angular';
+import { SaleService } from '../services/sale.service';
+import { Sale } from '../models/sale.model';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-tab4',
@@ -7,41 +10,54 @@ import { NavController } from '@ionic/angular';
   styleUrls: ['tab4.page.scss'],
   standalone: false,
 })
-export class Tab4Page {
+export class Tab4Page implements OnInit, OnDestroy {
+  sales: Sale[] = [];
+  filteredSales: Sale[] = [];
   searchTerm: string = '';
+  private salesSubscription!: Subscription;
 
-  constructor(private navCtrl: NavController) { }
+  constructor(
+    private navCtrl: NavController,
+    private saleService: SaleService
+  ) { }
 
-  sales = [
-    { date: '2025-08-30', client: 'Maria Silva', value: 500, products: ['Produto A', 'Produto B'] },
-    { date: '2025-08-30', client: 'João Souza', value: 200, products: ['Produto X'] },
-    { date: '2025-08-29', client: 'Maria Silva', value: 500, products: ['Produto A', 'Produto B'] }
-  ];
+  ngOnInit() {
+    this.salesSubscription = this.saleService.sales$.subscribe(sales => {
+      this.sales = sales;
+      this.applyFilter();
+    });
+  }
 
-  get filteredSales() {
-    let filtered = this.sales.filter(sale =>
-      sale.client.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-      sale.date.includes(this.searchTerm)
-    );
+  ngOnDestroy() {
+    this.salesSubscription.unsubscribe();
+  }
 
-    const groups: any = {};
-    filtered.forEach(sale => {
-      if (!groups[sale.date]) groups[sale.date] = [];
-      groups[sale.date].push(sale);
+  ionViewWillEnter() {
+    this.saleService.getAllSales().subscribe();
+  }
+
+  searchSales(event: any) {
+    this.searchTerm = event.target.value?.toLowerCase() || '';
+    this.applyFilter();
+  }
+
+  applyFilter() {
+    const filtered = this.sales.filter(sale => {
+      const clientName = sale.cliente?.nome?.toLowerCase() || '';
+      const searchTerm = this.searchTerm.toLowerCase();
+      return clientName.includes(searchTerm) || sale.date.includes(searchTerm);
     });
 
-    return Object.keys(groups)
-      .sort((a, b) => new Date(b).getTime() - new Date(a).getTime())
-      .map(date => ({
-        date,
-        sales: groups[date]
-      }));
+    this.filteredSales = filtered.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
   }
+
   addNewSale() {
     this.navCtrl.navigateForward('/new-sale');
   }
-  openSaleDetails(sale: any) {
-    console.log('Abrir detalhes da venda:', sale);
-    this.navCtrl.navigateForward(`/sale-details/${sale.id}`);
+
+  openSaleDetails(sale: Sale) {
+    if (sale.id) {
+      this.navCtrl.navigateForward(`/sale-details/${sale.id}`);
+    }
   }
 }

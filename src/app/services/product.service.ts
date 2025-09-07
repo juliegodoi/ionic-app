@@ -1,3 +1,4 @@
+// src/app/services/product.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject, of, throwError } from 'rxjs';
@@ -50,6 +51,10 @@ export class ProductService {
         } else {
             return this.products$;
         }
+    }
+
+    public getProductsCache(): Product[] {
+        return this.productsCache;
     }
 
     getProductById(id: number): Observable<Product> {

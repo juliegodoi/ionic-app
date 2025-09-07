@@ -13,35 +13,32 @@
     <ion-card>
       <ion-item button (click)="selectClient()">
         <ion-label position="stacked" style="font-size: 22px;">Cliente *</ion-label>
-        <ion-input [value]="sale.selectedClient" placeholder="Selecionar cliente" readonly></ion-input>
-        <ion-icon name="chevron-down-outline" slot="end" size="small" class="dropdown-icon">
-        </ion-icon>
+        <ion-input [value]="sale.cliente.nome" placeholder="Selecionar cliente" readonly></ion-input>
+        <ion-icon name="chevron-down-outline" slot="end" size="small" class="dropdown-icon"></ion-icon>
       </ion-item>
     </ion-card>
 
     <ion-card>
       <ion-item button (click)="selectProducts()">
         <ion-label position="stacked" style="font-size: 22px;">Produtos *</ion-label>
-        <ion-input [value]="sale.selectedProducts.length > 0 ? sale.selectedProducts.length + ' selecionados' : ''"
+        <ion-input [value]="sale.produtos.length > 0 ? sale.produtos.length + ' selecionados' : ''"
           placeholder="Selecionar produtos" readonly>
         </ion-input>
-        <ion-icon name="chevron-down-outline" slot="end" size="small" class="dropdown-icon">
-        </ion-icon>
+        <ion-icon name="chevron-down-outline" slot="end" size="small" class="dropdown-icon"></ion-icon>
       </ion-item>
     </ion-card>
 
     <ion-card>
       <ion-item>
         <ion-label position="stacked" style="font-size: 22px;">Data da venda *</ion-label>
-        <ion-input [(ngModel)]="sale.date" placeholder="00/00/0000" inputmode="numeric" maxlength="10">
-        </ion-input>
+        <ion-input [(ngModel)]="sale.date" placeholder="00/00/0000" inputmode="numeric" maxlength="10"></ion-input>
       </ion-item>
     </ion-card>
 
     <ion-card>
       <ion-item>
         <ion-label position="stacked" style="font-size: 22px;">Forma de pagamento *</ion-label>
-        <ion-select [(ngModel)]="sale.paymentMethod" placeholder="Selecione" interface="popover">
+        <ion-select [(ngModel)]="sale.formaPagamento" placeholder="Selecione" interface="popover">
           <ion-select-option value="cartao_debito">Cartão de Débito</ion-select-option>
           <ion-select-option value="cartao_credito">Cartão de Crédito</ion-select-option>
           <ion-select-option value="dinheiro">Dinheiro</ion-select-option>
@@ -53,14 +50,14 @@
     <ion-card>
       <ion-item>
         <ion-label position="stacked" style="font-size: 22px;">Condição de pagamento</ion-label>
-        <ion-textarea [(ngModel)]="sale.paymentCondition" placeholder="Descreva as condições de pagamento..." rows="4"
+        <ion-textarea [(ngModel)]="sale.condicoes" placeholder="Descreva as condições de pagamento..." rows="4"
           autoGrow="true"></ion-textarea>
       </ion-item>
     </ion-card>
 
     <div style="margin-top: 24px; padding: 16px;">
       <ion-label style="font-size: 20px;">
-        Valor total:
+        Valor total: R$ {{ sale.totalValue.toFixed(2) }}
       </ion-label>
     </div>
 
